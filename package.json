@@ -1,0 +1,30 @@
+{
+  "name": "babel-plugin-transform-v-jsx",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "chai": "^4.1.2",
+    "js-yaml": "^3.10.0",
+    "prettier": "^1.10.2",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "mocha": "^4.1.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kindy/babel-plugin-transform-v-jsx.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kindy/babel-plugin-transform-v-jsx/issues"
+  },
+  "homepage": "https://github.com/kindy/babel-plugin-transform-v-jsx#readme"
+}
