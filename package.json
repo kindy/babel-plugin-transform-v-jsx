@@ -22,7 +22,7 @@
     "url": "git+https://github.com/kindy/babel-plugin-transform-v-jsx.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/kindy/babel-plugin-transform-v-jsx/issues"
   },
