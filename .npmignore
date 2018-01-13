@@ -1,0 +1,4 @@
+*.lock
+.idea
+*.tgz
+*.tar.*
