@@ -15,8 +15,8 @@ const options = {
 const f = i => prettier.format(i, {semi: false})
 const tr = i => f(babel.transform(i, options).code)
 
-const genCase = ({i, o, t}, idx) => {
-  it(`case #${idx + 1}${t ? `: ${t}` : ''}`, () => {
+const genCase = ({i, o, t, only}, idx) => {
+  (only ? it.only : it)(`case #${idx + 1}${t ? `: ${t}` : ''}`, () => {
     expect(tr(i)).to.equal(f(o))
   })
 }
@@ -56,6 +56,18 @@ describe('v:if', () => {
       <a v:if><b /></a>
     o: |
       null
+
+  - t: 'v:if in {}'
+    i: |
+      <a>{<a2 v:if={1} />}<b /></a>
+    o: |
+      <a>{1 ? <a2 /> : null}<b /></a>
+
+  - t: 'v:if in x={}'
+    i: |
+      <a x={<a2 v:if={1} />}><b /></a>
+    o: |
+      <a x={1 ? <a2 /> : null}><b /></a>
   `).forEach(genCase)
 })
 

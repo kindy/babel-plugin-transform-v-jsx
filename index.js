@@ -11,6 +11,8 @@ module.exports = function({types: t}) {
             (x.name.name.name === 'if' || x.name.name.name === 'class' || x.name.name.name === 'wrap'),
         )
         if (nsAttrs.length) {
+          // console.log('node', path.node, nsAttrs);
+
           const attrs = path.node.openingElement.attributes
           nsAttrs.forEach(x => {
             const idx = attrs.indexOf(x)
@@ -24,8 +26,14 @@ module.exports = function({types: t}) {
               case 'if':
                 // path.node.openingElement.attributes.splice(idx, 1);
                 // console.log('path', path);
-                const val = x.value ? t.ConditionalExpression(x.value.expression || x.value, path.node, t.nullLiteral()) : t.nullLiteral()
-                path.replaceWith(path.parent.type.match(/^jsx/i) ? t.JSXExpressionContainer(val) : val)
+                const val = x.value ?
+                  t.ConditionalExpression(x.value.expression || x.value, path.node, t.nullLiteral()) :
+                  t.nullLiteral()
+
+                const {type: parentType} = path.parent
+                const newNode = (parentType.match(/^jsx/i) && parentType !== 'JSXExpressionContainer') ? t.JSXExpressionContainer(val) : val
+                // console.log('v:if parent', path.parent)
+                path.replaceWith(newNode)
                 break
               case 'class':
                 if (path.node.openingElement.attributes.filter(x => x.type === 'JSXAttribute' && x.name.name === 'className').length) {
