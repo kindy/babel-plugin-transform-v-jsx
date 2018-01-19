@@ -1,3 +1,6 @@
+const fs = require('fs')
+const path = require('path')
+const globby = require('globby')
 const chai = require('chai')
 const yaml = require('js-yaml')
 const {expect} = chai
@@ -15,133 +18,32 @@ const options = {
 const f = i => prettier.format(i, {semi: false})
 const tr = i => f(babel.transform(i, options).code)
 
-const genCase = ({i, o, t, only}, idx) => {
-  (only ? it.only : it)(`case #${idx + 1}${t ? `: ${t}` : ''}`, () => {
+const genSuit = (t, p) => {
+  let def = Array.isArray(t) ? {cases: t} : t
+  const {suit = p} = def
+  const fn = def.only ? describe.only : def.skip ? describe.skip : describe
+  fn(suit, () => {
+    def.cases.forEach(genCase)
+  })
+}
+
+const genCase = ({i, o, t, only, skip}, idx) => {
+  const fn = only ? it.only : skip ? it.skip : it
+  fn(`case #${idx + 1}${t ? `: ${t}` : ''}`, () => {
     expect(tr(i)).to.equal(f(o))
   })
 }
 
+(async () => {
+  const paths = await globby('*.yml', {
+    cwd: __dirname,
+  })
 
-describe('v:if', () => {
-  yaml.safeLoad(`
-  - i: |
-      <a><b v:if={a} /></a>
-    o: |
-      <a>{a ? <b/> : null}</a>
+  paths.forEach(p => {
+    const txt = fs.readFileSync(path.resolve(__dirname, p))
+    const t = yaml.safeLoad(txt)
+    genSuit(t, p)
+  })
 
-  - i: |
-      <a><b v:if="a" /></a>
-    o: |
-      <a>{"a" ? <b/> : null}</a>
-
-  - i: |
-      <a><b v:if /></a>
-    o: |
-      <a>{null}</a>
-
-  - t: 'v:if in root'
-    i: |
-      <a v:if={a}><b /></a>
-    o: |
-      a ? <a><b /></a> : null
-
-  - t: 'v:if in root'
-    i: |
-      <a v:if="a"><b /></a>
-    o: |
-      "a" ? <a><b /></a> : null
-
-  - t: 'v:if in root'
-    i: |
-      <a v:if><b /></a>
-    o: |
-      null
-
-  - t: 'v:if in {}'
-    i: |
-      <a>{<a2 v:if={1} />}<b /></a>
-    o: |
-      <a>{1 ? <a2 /> : null}<b /></a>
-
-  - t: 'v:if in x={}'
-    i: |
-      <a x={<a2 v:if={1} />}><b /></a>
-    o: |
-      <a x={1 ? <a2 /> : null}><b /></a>
-  `).forEach(genCase)
-})
-
-describe('v:class', () => {
-  yaml.safeLoad(`
-  - i: |
-      <a v:class="a" />
-    o: |
-      <a className={React._extFixClassName("a")} />
-
-  - i: |
-      <a v:class={a} />
-    o: |
-      <a className={React._extFixClassName(a)} />
-
-  - i: |
-      <a v:class />
-    o: |
-      <a className />
-  `).forEach(genCase)
-})
-
-/*
-<div className={React._extFixClassName(null)}>
-</div>
-      <Tooltip title={'ab'}><a /></Tooltip>
-</div>
- */
-
-describe('v:wrap', () => {
-  yaml.safeLoad(`
-  - i: |
-      <c>
-        <a v:wrap={<A v:if="1" title={'ab'} />} />
-      </c>
-    o: |
-      <c>
-        {("1" ? <A title={'ab'}><a /></A> : null)}
-      </c>
-
-  - i: |
-      <c>
-        <a v:if="2" v:wrap={<A/>} />
-      </c>
-    o: |
-      <c>
-        {("2" ? <A><a /></A> : null)}
-      </c>
-
-  - i: |
-      <c>
-        <a v:if="2" v:wrap={<A v:if="1"/>} />
-      </c>
-    o: |
-      <c>
-        {("2" ? ("1" ? <A><a /></A> : null) : null)}
-      </c>
-
-  - t: 'v:wrap in root'
-    i: |
-      <a v:wrap={<A v:if="1"/>} />
-    o: |
-      ("1" ? <A><a /></A> : null)
-
-  - t: 'v:wrap in root'
-    i: |
-      <a v:if="2" v:wrap={<A />} />
-    o: |
-      ("2" ? <A><a /></A> : null)
-
-  - t: 'v:wrap in root'
-    i: |
-      <a v:if="2" v:wrap={<A v:if="1"/>} />
-    o: |
-      ("2" ? ("1" ? <A><a /></A> : null) : null)
-  `).forEach(genCase)
-})
+  run()
+})()

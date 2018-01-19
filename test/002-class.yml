@@ -1,0 +1,15 @@
+cases:
+  - i: |
+      <a v:class="a" />
+    o: |
+      <a className={React._extFixClassName("a")} />
+
+  - i: |
+      <a v:class={a} />
+    o: |
+      <a className={React._extFixClassName(a)} />
+
+  - i: |
+      <a v:class />
+    o: |
+      <a className />
