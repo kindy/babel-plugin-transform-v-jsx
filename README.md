@@ -1,5 +1,8 @@
 # babel-plugin-transform-v-jsx
 
+[![npm version](https://img.shields.io/npm/v/babel-plugin-transform-v-jsx.svg?style=flat-square)](https://www.npmjs.com/package/babel-plugin-transform-v-jsx)
+
+
 ## `v:if`
 
 Make conditional render simple.
