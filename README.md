@@ -1,5 +1,6 @@
 # babel-plugin-transform-v-jsx
 
+[![build status](https://img.shields.io/travis/kindy/babel-plugin-transform-v-jsx/master.svg?style=flat-square)](https://travis-ci.org/kindy/babel-plugin-transform-v-jsx)
 [![npm version](https://img.shields.io/npm/v/babel-plugin-transform-v-jsx.svg?style=flat-square)](https://www.npmjs.com/package/babel-plugin-transform-v-jsx)
 
 
