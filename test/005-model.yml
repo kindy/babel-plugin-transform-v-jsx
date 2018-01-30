@@ -1,0 +1,25 @@
+cases:
+  - i: |
+      <input v:model={this.a} />
+    o: |
+      <input value={this.a} onChange={val => this.a = val} />
+
+  - i: |
+      <A v:model={{val: this.a.b}} />
+    o: |
+      <A val={this.a.b} onChange={val => this.a.b = val)} />
+
+  - i: |
+      <A v:model={this.a[1], onUpdate} />
+    o: |
+      <A value={this.a[1]} onUpdate={val => this.a[1] = val} />
+
+  - i: |
+      <A v:model={{val: a.b}, onUpdate} />
+    o: |
+      <A val={a.b} onUpdate={val => a.b = val} />
+
+  - i: |
+      <A v:model={abc} />
+    o: |
+      <A value={abc} onChange={val => abc = val} />

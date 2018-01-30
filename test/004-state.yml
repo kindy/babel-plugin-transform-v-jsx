@@ -1,0 +1,20 @@
+cases:
+  - i: |
+      <input v:state={this.state.a} />
+    o: |
+      <input value={this.state.a} onChange={val => this.setState({a: val})} />
+
+  - i: |
+      <A v:state={{val: this.state.a}} />
+    o: |
+      <A val={this.state.a} onChange={val => this.setState({a: val})} />
+
+  - i: |
+      <A v:state={this.state.a, onUpdate} />
+    o: |
+      <A value={this.state.a} onUpdate={val => this.setState({a: val})} />
+
+  - i: |
+      <A v:state={{val: this.state.a}, onUpdate} />
+    o: |
+      <A val={this.state.a} onUpdate={val => this.setState({a: val})} />
