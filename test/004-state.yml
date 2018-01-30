@@ -1,3 +1,4 @@
+skip: true
 cases:
   - i: |
       <input v:state={this.state.a} />

@@ -1,0 +1,7 @@
+cases:
+  - t: ignonre unknown tag & directive
+    i: |
+      <v:a v:abc />
+    o: |
+      <v:a v:abc />
+    v: '>= 0.0.2'

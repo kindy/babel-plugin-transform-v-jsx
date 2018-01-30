@@ -3,13 +3,22 @@ cases:
       <a v:class="a" />
     o: |
       <a className={React._extFixClassName("a")} />
+    v: '>= 0.0.2'
 
   - i: |
       <a v:class={a} />
     o: |
       <a className={React._extFixClassName(a)} />
+    v: '>= 0.0.2'
 
   - i: |
       <a v:class />
     o: |
       <a className />
+    v: '>= 0.0.2'
+
+  - t: could not use with className
+    i: |
+      <a v:class className />
+    throw: 'v:class can not use with className'
+    v: '>= 0.0.2'

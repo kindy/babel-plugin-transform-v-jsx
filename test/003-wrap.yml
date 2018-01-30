@@ -1,5 +1,12 @@
 cases:
-  - i: |
+  - t: basic
+    i: |
+      <a v:wrap={<A />} />
+    o: |
+      <A><a /></A>
+
+  - t: wrap tag with v:if
+    i: |
       <c>
         <a v:wrap={<A v:if="1" title={'ab'} />} />
       </c>
@@ -8,16 +15,18 @@ cases:
         {("1" ? <A title={'ab'}><a /></A> : null)}
       </c>
 
-  - i: |
+  - t: base tag with v:if
+    i: |
       <c>
-        <a v:if="2" v:wrap={<A/>} />
+        <a v:if="2" v:wrap={<A/>} v:class />
       </c>
     o: |
       <c>
-        {("2" ? <A><a /></A> : null)}
+        {("2" ? <A><a className /></A> : null)}
       </c>
 
-  - i: |
+  - t: both base & wrap tag with v:if
+    i: |
       <c>
         <a v:if="2" v:wrap={<A v:if="1"/>} />
       </c>
@@ -25,20 +34,21 @@ cases:
       <c>
         {("2" ? ("1" ? <A><a /></A> : null) : null)}
       </c>
+    v: '>= 0.0.2'
 
-  - t: 'v:wrap in root'
+  - t: in root, wrap tag with v:if
     i: |
       <a v:wrap={<A v:if="1"/>} />
     o: |
       ("1" ? <A><a /></A> : null)
 
-  - t: 'v:wrap in root'
+  - t: in root, base tag with v:if
     i: |
       <a v:if="2" v:wrap={<A />} />
     o: |
       ("2" ? <A><a /></A> : null)
 
-  - t: 'v:wrap in root'
+  - t: in root, both tag with v:if
     i: |
       <a v:if="2" v:wrap={<A v:if="1"/>} />
     o: |

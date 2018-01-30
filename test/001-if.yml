@@ -3,43 +3,59 @@ cases:
       <a><b v:if={a} /></a>
     o: |
       <a>{a ? <b/> : null}</a>
+    v: '>= 0.0.2'
 
   - i: |
       <a><b v:if="a" /></a>
     o: |
       <a>{"a" ? <b/> : null}</a>
+    v: '>= 0.0.2'
 
   - i: |
       <a><b v:if /></a>
     o: |
       <a>{null}</a>
+    v: '>= 0.0.2'
 
   - t: 'v:if in root'
     i: |
       <a v:if={a}><b /></a>
     o: |
       a ? <a><b /></a> : null
+    v: '>= 0.0.2'
 
   - t: 'v:if in root'
     i: |
       <a v:if="a"><b /></a>
     o: |
       "a" ? <a><b /></a> : null
+    v: '>= 0.0.2'
 
-  - t: 'v:if in root'
+  - t: 'v:if in root empty'
     i: |
       <a v:if><b /></a>
     o: |
       null
+    v: '>= 0.0.2'
 
   - t: 'v:if in {}'
     i: |
       <a>{<a2 v:if={1} />}<b /></a>
     o: |
       <a>{1 ? <a2 /> : null}<b /></a>
+    v: '>= 0.0.2'
 
   - t: 'v:if in x={}'
     i: |
       <a x={<a2 v:if={1} />}><b /></a>
     o: |
       <a x={1 ? <a2 /> : null}><b /></a>
+    v: '>= 0.0.2'
+
+  - t: 'v:if always has high priority'
+    i: |
+      <a v:wrap={<A/>} v:class v:if="2" />
+    o: |
+      "2" ? <A><a className /></A> : null
+    v: '>= 0.0.2'
+

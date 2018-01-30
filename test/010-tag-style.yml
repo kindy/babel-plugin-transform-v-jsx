@@ -1,0 +1,19 @@
+skip: true
+cases:
+  - i: |
+      <v:style>{`
+        .red {
+          color: red;
+        }
+      `}</v:style>
+    o: |
+      TBD
+
+  - i: |
+      <v:style lang="less">{`
+        .red {
+          color: red;
+        }
+      `}</v:style>
+    o: |
+      TBD

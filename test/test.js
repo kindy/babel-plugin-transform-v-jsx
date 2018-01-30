@@ -21,16 +21,20 @@ const tr = i => f(babel.transform(i, options).code)
 const genSuit = (t, p) => {
   let def = Array.isArray(t) ? {cases: t} : t
   const {suit = p} = def
-  const fn = def.only ? describe.only : def.skip ? describe.skip : describe
-  fn(suit, () => {
+  const suitFn = def.only ? describe.only : def.skip ? describe.skip : describe
+  suitFn(suit, () => {
     def.cases.forEach(genCase)
   })
 }
 
-const genCase = ({i, o, t, only, skip}, idx) => {
-  const fn = only ? it.only : skip ? it.skip : it
-  fn(`case #${idx + 1}${t ? `: ${t}` : ''}`, () => {
-    expect(tr(i)).to.equal(f(o))
+const genCase = ({i, o, t, only, skip, throw: $throw}, idx) => {
+  const caseFn = only ? it.only : skip ? it.skip : it
+  caseFn(`case #${idx + 1}${t ? `: ${t}` : ''}`, () => {
+    if ($throw) {
+      expect(() => tr(i)).to.throw($throw);
+    } else {
+      expect(tr(i)).to.equal(f(o))
+    }
   })
 }
 
