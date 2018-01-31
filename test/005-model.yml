@@ -8,7 +8,7 @@ cases:
   - i: |
       <A v:model={{val: this.a.b}} />
     o: |
-      <A val={this.a.b} onChange={val => this.a.b = val)} />
+      <A val={this.a.b} onChange={val => this.a.b = val} />
 
   - i: |
       <A v:model={this.a[1], onUpdate} />

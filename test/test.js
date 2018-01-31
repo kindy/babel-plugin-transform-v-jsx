@@ -1,11 +1,10 @@
 const fs = require('fs')
 const path = require('path')
 const globby = require('globby')
-const chai = require('chai')
+const {expect} = require('chai')
 const yaml = require('js-yaml')
-const {expect} = chai
 const babel = require('babel-core')
-const prettier = require('prettier');
+const prettier = require('prettier')
 
 const options = {
   ast: false,
@@ -15,8 +14,15 @@ const options = {
     './index.js',
   ],
 }
-const f = i => prettier.format(i, {semi: false})
-const tr = i => f(babel.transform(i, options).code)
+
+// XXX: babel will transform `this` to `_this` in module top level, so we wrap our code in a function
+const wrap = code => `function x() {${code}}`
+const unwrap = code => code.match(/^function x\(/) ?
+  code.replace(/^function x\(\) \{/, '',).replace(/\}$/, '') :
+  code
+
+const fmt = code => prettier.format(unwrap(code), {semi: false})
+const transform = code => fmt(babel.transform(wrap(code), options).code)
 
 const genSuit = (t, p) => {
   let def = Array.isArray(t) ? {cases: t} : t
@@ -31,9 +37,9 @@ const genCase = ({i, o, t, only, skip, throw: $throw}, idx) => {
   const caseFn = only ? it.only : skip ? it.skip : it
   caseFn(`case #${idx + 1}${t ? `: ${t}` : ''}`, () => {
     if ($throw) {
-      expect(() => tr(i)).to.throw($throw);
+      expect(() => transform(i)).to.throw($throw);
     } else {
-      expect(tr(i)).to.equal(f(o))
+      expect(transform(i)).to.equal(fmt(o))
     }
   })
 }

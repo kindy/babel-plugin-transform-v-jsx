@@ -5,3 +5,10 @@ cases:
     o: |
       <v:a v:abc />
     v: '>= 0.0.2'
+
+  - t: keep this unchang
+    i: |
+      <a a={this.a} />
+    o: |
+      <a a={this.a} />
+    v: '>= 0.0.3'

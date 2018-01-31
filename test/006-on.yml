@@ -1,0 +1,16 @@
+skip: true
+cases:
+  - t: basic
+    i: |
+      <input v-on:focus={ev => this.onClick(ev)} />
+    o: |
+      <input onFocus={ev => this.onClick(ev)} />
+
+  - t: with modifiers
+    i: |
+      <input v-on:click={{once}, ev => this.onClick(ev)} v-on:focus={{once}, this.onFocus.bind(this)} />
+    o: |
+      <input
+        onClick={vJsxHelperEventWrap(ev => this.onClick(ev), {modifiers: {once: true}})}
+        onFocus={vJsxHelperEventWrap(this.onFocus.bind(this), {modifiers: {once: true}})}
+        />
